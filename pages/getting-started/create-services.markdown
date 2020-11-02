@@ -76,8 +76,8 @@ git remote add origin https://github.com/$user/helloworld.git
 # push it
 git push origin master
 
-# set the env to dev
-micro env set dev
+# set the env to platform
+micro env set platform
 
 # ensure you've already logged in otherwise
 micro login
@@ -129,11 +129,5 @@ If you want to query via an API, check out the Public API doc under the Get Star
 TLDR
 
 ```
-curl -H "Micro-Namespace: $(micro user namespace)" https://api.m3o.dev/helloworld
-```
-
-Or
-
-```
-curl https://$(micro user namespace).m3o.dev/helloworld
+curl -H "Micro-Namespace: $(micro user namespace)" https://api.m3o.com/helloworld
 ```

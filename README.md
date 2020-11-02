@@ -1,6 +1,6 @@
 # M3O Docs
 
-This directory serves as the M3O docs made available on [docs.m3o.com](https://docs.m3o.com)
+This directory serves as the M3O docs made available on [m3o.dev](https://m3o.dev)
 
 ## Overview
 

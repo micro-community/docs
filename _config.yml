@@ -18,16 +18,23 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: M3O Docs
-email: support@micro.mu
+title: Micro-Community Dev Channel
+email: mail@arch.wiki
 description: >- # this means to ignore newlines until "baseurl:"
-  M3O Docs site - getting started, docs, tutorials and more.
+  M3O dev site - getting started, docs, tutorials and more.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: m3oservices
-github_username:  m3o
-footer_content: "Copyright &copy; 2020 Micro Services, Inc."
-ga_tracking: UA-70478210-5
+github_username:  micro-community
+
+# Aux links for the upper right navigation
+aux_links:
+  "micro community on GitHub":
+    - "//github.com/micro-community"
+
+footer_content: "Copyright &copy; 2020 Micro Community, Org. Powered by <a href=\"https://github.com/micro-community\">micro-community team.</a>"
+
+#ga_tracking: UA-70478210-5
 
 # Build settings
 highlighter: rouge

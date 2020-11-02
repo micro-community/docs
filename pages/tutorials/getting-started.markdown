@@ -405,7 +405,7 @@ key: mykey, value: Hi there
 
 ## Config
 
-Note: this is a quick overview of config. For a more in depth look, please refer to the [config tutorial](https://docs.m3o.com/tutorials/config).
+Note: this is a quick overview of config. For a more in depth look, please refer to the [config tutorial](https://m3o.dev/tutorials/config).
 
 Configuration and secrets is an essential part of any production system - let's see how the Micro config works.
 

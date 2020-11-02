@@ -33,7 +33,7 @@ Whether you invite them or just plain create the account we'll keep track and in
 
 ## Additional Services
 
-Beyond 10 services, we bill every additional service at $5/month. Additional service meaning anything with a new unique name
+Beyond 10 services, we bill every additional service at $3/month. Additional service meaning anything with a new unique name
 e.g users, customers, orders. We'll add a line item on your invoice called "M3O Additional Services" automatically.
 
 ## Changing Your Password
@@ -46,14 +46,14 @@ micro user set password
 
 ## Dev Environment
 
-The Dev environment is a free tier hosted by us as a best effort service. It's a place for hobbyists and side projects. 
-To signup and login see the following.
+The Dev environment is a free tier hosted by us as a best effort service. It's a place for hobbyists and side projects. To get 
+access please talk to #m3o-platform on [slack](https://slack.m3o.com). To login see the following.
 
 ```
 # set the dev env
 micro env set dev
 
-# signup for free
+# signup > use the credit card '4242 4242 4242 4242'
 micro signup
 
 # login
@@ -64,24 +64,14 @@ The Dev env is also subject to fair usage. There are no SLAs or support. The quo
 
 ## Fair Usage Policy
 
-Our fair usage policy applies caps to usage on a per namespace basis. This is so we can maintain a shared system 
+Our fair usage policy applies caps to usage on a per service and per namespace basis. This is so we can maintain a shared system 
 for everyone to use in coordination and have a great experience. The limits are below but may change, vary or include new resource types.
 
-### Dev
-
-The per namespace limits of the Dev environment
+Per service limits
 
 - CPU - 1 core
-- Memory - 1 Gb
-- Disk - 10 Gb
-
-### Platform
-
-The per namespace limits of the Platform environment
-
-- CPU - 2 cores
-- Memory - 2 Gb
-- Disk - 20 Gb
+- Memory - 128 mb
+- Disk - 512 mb
 
 ## Cancellation
 
