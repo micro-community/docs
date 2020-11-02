@@ -1,0 +1,620 @@
+{"0": {
+    "doc": "Authentication",
+    "title": "Authentication and authorization",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/authentication#authentication-and-authorization",
+    "relUrl": "/tutorials/authentication#authentication-and-authorization"
+  },"1": {
+    "doc": "Authentication",
+    "title": "Table of contents",
+    "content": ". | Rules | . Micro (and consequently M3O) comes with fine tunable authentication and authorization capabilities. This tutorial assumes you are already logged in. For M3O that means you have signed up, for a local micro server it means doing a micro login and logging in with id admin and password micro: . $ micro login Enter email address: admin Enter Password: Successfully logged in. ",
+    "url": "http://0.0.0.0:4000/tutorials/authentication#table-of-contents",
+    "relUrl": "/tutorials/authentication#table-of-contents"
+  },"2": {
+    "doc": "Authentication",
+    "title": "Rules",
+    "content": "Rules determine what resource a user can access. The default rule is the following: . $ micro auth list rules ID Scope Access Resource Priority default &lt;public&gt; GRANTED *:*:* 0 . The default rule makes all services callable that appear in the micro status output. Let’s see an example of this. $ micro run helloworld $ namespace=$(mico user namespace) $ curl -H \"Micro-Namespace: $namespace\" https://api.m3o.com/helloworld # Locally: # curl 127.0.0.1:8080/helloworld/call?name=Alice {\"msg\":\"Hello Alice\"} . If we want to prevent other people from calling our services, we can create the following rule . # This command creates a rule that enables only logged in users to call the micro server micro auth create rule --access=granted --scope='*' --resource=\"*:*:*\" onlyloggedin . and delete the default one. Here, the scope * is markedly different from the &lt;public&gt; scope we have seen earlier when doing a micro auth list rules: . $ micro auth list rules ID Scope Access Resource Priority onlyloggedin * GRANTED *:*:* 0 default &lt;public&gt; GRANTED *:*:* 0 . Now, let’s remove the default rule. # This command deletes the 'default' rule - the rule which enabled anyone to call the 'micro server'. $ micro auth delete rule default Rule deleted . Let’s try curling our service again: . $ micro run helloworld $ namespace=$(mico user namespace) $ curl -H \"Micro-Namespace: $namespace\" https://api.m3o.com/helloworld # Locally: # curl 127.0.0.1:8080/helloworld/call?name=Alice {\"Id\":\"helloworld\",\"Code\":401,\"Detail\":\"Unauthorized call made to helloworld:Helloworld.Call\",\"Status\":\"Unauthorized\"} . Great success! This means our onlyloggedin rule took effect. We can still call the service with a token: . $ micro run helloworld $ token=$(micro user token) $ curl -H \"Micro-Namespace: $namespace\" \"Authorization: Bearer $token\" https://api.m3o.com/helloworld # Locally: # curl \"Authorization: Bearer $token\" 127.0.0.1:8080/helloworld/call?name=Alice {\"msg\":\"Hello Alice\"} . (Please note tokens have a limited lifetime so the line $ token=$(micro user token) has to be reissued from time to time, or the command must be used inline.) . These are the very basics of auth. Please check back from time to time for more! . ",
+    "url": "http://0.0.0.0:4000/tutorials/authentication#rules",
+    "relUrl": "/tutorials/authentication#rules"
+  },"3": {
+    "doc": "Authentication",
+    "title": "Authentication",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/authentication",
+    "relUrl": "/tutorials/authentication"
+  },"4": {
+    "doc": "Building A Blog",
+    "title": "Building a Blog",
+    "content": "In this tutorial series, we are going to build a blog/CMS engine, going from a basic toy blog to a full blown CMS. ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog#building-a-blog",
+    "relUrl": "/tutorials/building-a-blog#building-a-blog"
+  },"5": {
+    "doc": "Building A Blog",
+    "title": "Building A Blog",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog",
+    "relUrl": "/tutorials/building-a-blog"
+  },"6": {
+    "doc": "Community",
+    "title": "Community",
+    "content": "Join the community to learn, share and collaborate. | Slack - chat in realtime | Discord - let’s get talking | LinkedIn - for the professionals | Twitter - follow the latest | . ",
+    "url": "http://0.0.0.0:4000/resources/community",
+    "relUrl": "/resources/community"
+  },"7": {
+    "doc": "Concepts",
+    "title": "Concepts",
+    "content": "Here we provide an overview of concepts that make up Micro . ",
+    "url": "http://0.0.0.0:4000/concepts",
+    "relUrl": "/concepts"
+  },"8": {
+    "doc": "Create Services",
+    "title": "Create Services",
+    "content": "M3O is Micro as a Service. Use the open source tools to build your services and deploy to the platform. ",
+    "url": "http://0.0.0.0:4000/getting-started/create-services",
+    "relUrl": "/getting-started/create-services"
+  },"9": {
+    "doc": "Create Services",
+    "title": "Deps",
+    "content": "You’ll likely need . | Go =&gt; https://golang.org/dl/ | Git =&gt; https://git-scm.com/downloads | Micro =&gt; https://github.com/micro/micro | Protobuf =&gt; https://github.com/protocolbuffers/protobuf/releases/tag/v3.13.0 | . ",
+    "url": "http://0.0.0.0:4000/getting-started/create-services#deps",
+    "relUrl": "/getting-started/create-services#deps"
+  },"10": {
+    "doc": "Create Services",
+    "title": "New Service",
+    "content": "To create a new service simply do . micro new helloworld . This generates scaffolding much like Rails for a simple helloworld microservice. Follow any instructions in the output aka make proto. To run your service locally and ensure it works just start the server and run it. # start the server micro server # set local env micro env set local # start your service micro run helloworld . To check its actually running do the following . # check the status micro status # check its registered micro services # check the logs micro logs helloworld . And to finally kill it . # kill it micro kill helloworld . ",
+    "url": "http://0.0.0.0:4000/getting-started/create-services#new-service",
+    "relUrl": "/getting-started/create-services#new-service"
+  },"11": {
+    "doc": "Create Services",
+    "title": "Deploy the service",
+    "content": "To deploy the service first you’ll need to check it into GitHub. We don’t yet support local source upload. # initialise git cd helloworld &amp;&amp; git init &amp;&amp; git add . &amp;&amp; git commit -m \"My helloworld service\" # create a new repo on github and push to it # assuming you created it, add the remote origin git remote add origin https://github.com/$user/helloworld.git # push it git push origin master # set the env to dev micro env set dev # ensure you've already logged in otherwise micro login # now run it micro run github.com/$user/helloworld . It’s that simply . ",
+    "url": "http://0.0.0.0:4000/getting-started/create-services#deploy-the-service",
+    "relUrl": "/getting-started/create-services#deploy-the-service"
+  },"12": {
+    "doc": "Create Services",
+    "title": "Call service",
+    "content": "Check the service is running and call it. Because we built from source, it’ll take a couple minutes to start (we’ll optimise later) . # check status micro status # check its registered micro services # call it micro helloworld --name=Alice . Note the notation for calling the service. Micro supports dynamic CLI commands, meaning anything in your namespace becomes a subcommand. micro [service] [endpoint] [args] . Where endpoint is ommitted we assume its the service name + “Call” method e.g helloworld becomes Helloworld.Call. If it was a Greet method we’d assume Helloworld.Greet with the cli command micro helloworld greet. Arguments can be passed through as flags so --name is the Name field. If you want a simpler way using pure json and raw methods . micro call helloworld Helloworld.Call '{\"name\": \"Alice\"}' . That also works . ",
+    "url": "http://0.0.0.0:4000/getting-started/create-services#call-service",
+    "relUrl": "/getting-started/create-services#call-service"
+  },"13": {
+    "doc": "Create Services",
+    "title": "External access",
+    "content": "If you want to query via an API, check out the Public API doc under the Get Started section. TLDR . curl -H \"Micro-Namespace: $(micro user namespace)\" https://api.m3o.dev/helloworld . Or . curl https://$(micro user namespace).m3o.dev/helloworld . ",
+    "url": "http://0.0.0.0:4000/getting-started/create-services#external-access",
+    "relUrl": "/getting-started/create-services#external-access"
+  },"14": {
+    "doc": "Development",
+    "title": "Development",
+    "content": "The m3o/dev repo is a place for design docs, runbooks, roadmap, etc. | Design docs | Company info | Contribution guide | Product Roadmap | User docs (this site) | Team issue tracker | . ",
+    "url": "http://0.0.0.0:4000/resources/development",
+    "relUrl": "/resources/development"
+  },"15": {
+    "doc": "Dynamic Config",
+    "title": "Config",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/config#config",
+    "relUrl": "/tutorials/config#config"
+  },"16": {
+    "doc": "Dynamic Config",
+    "title": "Table of contents",
+    "content": ". | CLI usage . | Secrets | . | From Services | Advanced Concepts . | Merging Config Values | . | . Config is a way to store configuration data for services. Config is both accessible from the Micro CLI and from services themselves. ",
+    "url": "http://0.0.0.0:4000/tutorials/config#table-of-contents",
+    "relUrl": "/tutorials/config#table-of-contents"
+  },"17": {
+    "doc": "Dynamic Config",
+    "title": "CLI usage",
+    "content": "Let’s assume we have a service called helloworld from which we want to read configuration data. First we have to insert said data with the cli. Config data can be organized under different “paths” with the dot notation. It’s a good convention to save all config data belonging to a service under a top level path segment matching the service name: . $ micro config set helloworld.somekey hello $ micro config get helloworld.somekey hello . We can save an other key too and read all values in one go with the dot notation: . $ micro config set helloworld.someotherkey \"Hi there!\" $ micro config get helloworld {\"somekey\":\"hello\",\"someotherkey\":\"Hi there!\"} . As it can be seen, the config (by default) stores configuration data as JSONs. We can save any type: . $ micro config set helloworld.someboolkey true $ micro config get helloworld.someboolkey true $ micro config get helloworld {\"someboolkey\":true,\"somekey\":\"hello\",\"someotherkey\":\"Hi there!\"} . So far we have only saved top level keys. Let’s explore the advantages of the dot notation. $ micro config set helloworld.keywithsubs.subkey1 \"So easy!\" {\"keywithsubs\":{\"subkey1\":\"So easy!\"},\"someboolkey\":true,\"somekey\":\"hello\",\"someotherkey\":\"Hi there!\"} . Some of the example keys are getting in our way, let’s learn how to delete: . $ micro config del helloworld.someotherkey $ micro config get helloworld {\"keywithsubs\":{\"subkey1\":\"So easy!\"},\"someboolkey\":true,\"somekey\":\"hello\"} . We can of course delete not just leaf level keys, but top level ones too: . $ micro config del helloworld.keywithsubs $ micro config get helloworld {\"someboolkey\":true,\"somekey\":\"hello\"} . Secrets . The config also supports secrets - values encrypted at rest. This helps in case of leaks, be it a security one or an accidental copypaste. They are fairly easy to save: . $ micro config set --secret helloworld.hushkey \"Very secret stuff\" $ micro config get helloworld.hushkey [secret] $ micro config get --secret helloworld.hushkey Very secret stuff $ micro config get helloworld {\"hushkey\":\"[secret]\",\"someboolkey\":true,\"somekey\":\"hello\"} $ micro config get --secret helloworld {\"hushkey\":\"Very secret stuff\",\"someboolkey\":true,\"somekey\":\"hello\"} . Even bool or number values can be saved as secrets, and they will appear as the string constant [secret] unless decrypted: . $ micro config set --secret helloworld.hush_number_key 42 $ micro config get helloworld {\"hush_number_key\":\"[secret]\",\"hushkey\":\"[secret]\",\"someboolkey\":true,\"somekey\":\"hello\"} # micro config get --secret helloworld {\"hush_number_key\":42,\"hushkey\":\"Very secret stuff\",\"someboolkey\":true,\"somekey\":\"hello\"} . ",
+    "url": "http://0.0.0.0:4000/tutorials/config#cli-usage",
+    "relUrl": "/tutorials/config#cli-usage"
+  },"18": {
+    "doc": "Dynamic Config",
+    "title": "From Services",
+    "content": "It is simiarly easy to access and set config values from a service. A good example of reading values is the config example test service: . package main import ( \"fmt\" \"time\" \"github.com/micro/micro/v3/service\" \"github.com/micro/micro/v3/service/config\" ) type keyConfig struct { Subkey string `json:\"subkey\"` Subkey1 int `json:\"subkey1\"` } type conf struct { Key keyConfig `json:\"key\"` } func main() { go func() { for { time.Sleep(time.Second) val, err := config.Get(\"key.subkey\") fmt.Println(\"Value of key.subkey: \", val.String(\"\"), err) val, err = config.Get(\"key\", config.Secret(true)) if err != nil { fmt.Println(err) } c := conf{} err = val.Scan(&amp;c.Key) fmt.Println(\"Value of key.subkey1: \", c.Key.Subkey1, err) } }() // run the service service.Run() } . The above service will print the value of key.subkey and key.subkey every second. By passing in the config.Secret(true) option, we tell config to decrypt secret values for us, similarly to the --secret CLI flag. The config interface specifies not just Get Set and Delete to access values, but a few convenience functions too in the Value interface. It is worth noting that String Int etc methods will do a best effort try at coercing types, ie. if the value saved is a string, Int will try to parse it. However, the same does not apply to the Scan method, which uses json.Unmarshal under the hood, which we all know fails when encountering type mismatches. Get should, in all cases, return a non nil Value, so even if the Get errors, Value.Int() and other operations should never panic. ",
+    "url": "http://0.0.0.0:4000/tutorials/config#from-services",
+    "relUrl": "/tutorials/config#from-services"
+  },"19": {
+    "doc": "Dynamic Config",
+    "title": "Advanced Concepts",
+    "content": "Merging Config Values . When saving a string with the CLI that is a valid JSON map, it gets expanded to be saved as a proper map structure, instead of a string, ie . $ micro config set helloworld '{\"a\": \"val1\", \"b\": \"val2\"}' $ micro config get helloworld.a val1 # If the string would be saved as is, `helloworld.a` would be a nonexistent path . The advantages of this become particularly visible when Setting a complex type with the library: . type conf struct { A string `json:\"a\"` B string `json:\"b\"` } c1 := conf{\"val1\", \"val2\"} config.Set(\"key\", c1) v, _ := config.Get(\"key\") c2 := &amp;conf{} v.Scan(c2) // c1 and c2 should be equal . Or with the following example . $ micro config del helloworld $ micro config set helloworld '{\"a\":1}' $ micro config get helloworld {\"a\":1} $ micro config set helloworld '{\"b\":2}' $ micro config get helloworld {\"a\":1,\"b\":2} . ",
+    "url": "http://0.0.0.0:4000/tutorials/config#advanced-concepts",
+    "relUrl": "/tutorials/config#advanced-concepts"
+  },"20": {
+    "doc": "Dynamic Config",
+    "title": "Dynamic Config",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/config",
+    "relUrl": "/tutorials/config"
+  },"21": {
+    "doc": "FAQ",
+    "title": "FAQ",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/faq",
+    "relUrl": "/faq"
+  },"22": {
+    "doc": "FAQ",
+    "title": "Account Recovery",
+    "content": "Issue micro signup --recover --email=youremail which will email you instructions on how to log in to namespaces you have access to. Currently there is no password recovery functionality, please contact us on Slack to do that. ",
+    "url": "http://0.0.0.0:4000/faq#account-recovery",
+    "relUrl": "/faq#account-recovery"
+  },"23": {
+    "doc": "FAQ",
+    "title": "Billing Portal",
+    "content": "To access your billing portal to adjust billing info or retrieve invoices run the following command to get your unique link. micro billing portal . ",
+    "url": "http://0.0.0.0:4000/faq#billing-portal",
+    "relUrl": "/faq#billing-portal"
+  },"24": {
+    "doc": "FAQ",
+    "title": "Pricing",
+    "content": "The Platform environment is priced at $35/user/month. We separately provide a free Dev environment which you can read about below. ",
+    "url": "http://0.0.0.0:4000/faq#pricing",
+    "relUrl": "/faq#pricing"
+  },"25": {
+    "doc": "FAQ",
+    "title": "Additional Users",
+    "content": "You can invite up to 5 additional users on the platform. Every additional user added to your account is billed at $35/month. Whether you invite them or just plain create the account we’ll keep track and invoice this as “M3O Additonal Users” on your invoices. See Get Started &gt; Invite Users to see how to invite them. ",
+    "url": "http://0.0.0.0:4000/faq#additional-users",
+    "relUrl": "/faq#additional-users"
+  },"26": {
+    "doc": "FAQ",
+    "title": "Additional Services",
+    "content": "Beyond 10 services, we bill every additional service at $5/month. Additional service meaning anything with a new unique name e.g users, customers, orders. We’ll add a line item on your invoice called “M3O Additional Services” automatically. ",
+    "url": "http://0.0.0.0:4000/faq#additional-services",
+    "relUrl": "/faq#additional-services"
+  },"27": {
+    "doc": "FAQ",
+    "title": "Changing Your Password",
+    "content": "Use the following command to change password (you must already be logged in): . micro user set password . ",
+    "url": "http://0.0.0.0:4000/faq#changing-your-password",
+    "relUrl": "/faq#changing-your-password"
+  },"28": {
+    "doc": "FAQ",
+    "title": "Dev Environment",
+    "content": "The Dev environment is a free tier hosted by us as a best effort service. It’s a place for hobbyists and side projects. To signup and login see the following. # set the dev env micro env set dev # signup for free micro signup # login micro login . The Dev env is also subject to fair usage. There are no SLAs or support. The quota is capped at 1 core and 1GB total resources. ",
+    "url": "http://0.0.0.0:4000/faq#dev-environment",
+    "relUrl": "/faq#dev-environment"
+  },"29": {
+    "doc": "FAQ",
+    "title": "Fair Usage Policy",
+    "content": "Our fair usage policy applies caps to usage on a per namespace basis. This is so we can maintain a shared system for everyone to use in coordination and have a great experience. The limits are below but may change, vary or include new resource types. Dev . The per namespace limits of the Dev environment . | CPU - 1 core | Memory - 1 Gb | Disk - 10 Gb | . Platform . The per namespace limits of the Platform environment . | CPU - 2 cores | Memory - 2 Gb | Disk - 20 Gb | . ",
+    "url": "http://0.0.0.0:4000/faq#fair-usage-policy",
+    "relUrl": "/faq#fair-usage-policy"
+  },"30": {
+    "doc": "FAQ",
+    "title": "Cancellation",
+    "content": "If you’d like to cancel your subscription please email support@m3o.com. ",
+    "url": "http://0.0.0.0:4000/faq#cancellation",
+    "relUrl": "/faq#cancellation"
+  },"31": {
+    "doc": "FAQ",
+    "title": "Support",
+    "content": "If you’re a paying customer you can join #m3o-support on slack or email support@m3o.com. Otherwise you can join #m3o-dev or #m3o-platform for general discussions around each environment. ",
+    "url": "http://0.0.0.0:4000/faq#support",
+    "relUrl": "/faq#support"
+  },"32": {
+    "doc": "Framework",
+    "title": "Framework",
+    "content": "Micro is a framework for cloud native development. ",
+    "url": "http://0.0.0.0:4000/concepts/framework",
+    "relUrl": "/concepts/framework"
+  },"33": {
+    "doc": "Framework",
+    "title": "Overview",
+    "content": "Micro addresses the key requirements for building distributed systems. It leverages the microservices architecture pattern and provides a set of services which act as the building blocks of a platform. Micro deals with the complexity of distributed systems and provides simpler programmable abstractions to build on. ",
+    "url": "http://0.0.0.0:4000/concepts/framework#overview",
+    "relUrl": "/concepts/framework#overview"
+  },"34": {
+    "doc": "Framework",
+    "title": "Features",
+    "content": "Micro focuses on the concept of Development Runtime Infrastructure, creating separation between the varying concerns of development and infrastructure using a runtime as an abstraction layer, then providing entry points for external systems to access services run with Micro. The framework is composed of the following features: . | Server: A distributed systems runtime composed of building block services which abstract away the underlying infrastructure and provide a programmable abstraction layer. Authentication, configuration, messaging, storage and more built in. | Clients: Multiple entrypoints through which you can access your services. Write services once and access them through every means you’ve already come to know. A HTTP api, gRPC proxy and commmand line interface. | Library: A Go library which makes it drop dead simple to write your services without having to piece together lines and lines of boilerplate. Auto configured and initialised by default, just import and get started quickly. | . ",
+    "url": "http://0.0.0.0:4000/concepts/framework#features",
+    "relUrl": "/concepts/framework#features"
+  },"35": {
+    "doc": "Framework",
+    "title": "Runtime Components",
+    "content": "The runtime is composed of the following features: . Clients . Clients are entrypoints into the system. They enable access to your services through well known entrypoints. | api: An api gateway which acts as a single entry point for the frontend with dynamic request routing using service discovery. | cli: Access services via the terminal. Every good developer tool needs a CLI as a defacto standard for operating a system. | proxy: An identity aware proxy which allows you to access remote environments without painful configuration or vpn. | . Services . Services are the core services that makeup the runtime. They provide a programmable abstraction layer for distributed systems infrastructure. | auth: Authentication and authorization is a core requirement for any production ready platform. Micro builds in an auth service for managing service to service and user to service authentication. | broker: A message broker allowing for async messaging. Microservices are event driven architectures and should provide messaging as a first class citizen. Notify other services of events without needing to worry about a response. | config: Manage dynamic config in a centralised location for your services to access. Has the ability to load config from multiple sources and enables you to update config without needing to restart services. | network: A drop in service to service networking solution. Offload service discovery, load balancing and fault tolerance to the network. The micro network dynamically builds a latency based routing table based on the local registry. It includes support for multi-cloud networking. | registry: The registry provides service discovery to locate other services, store feature rich metadata and endpoint information. It’s a service explorer which lets you centrally and dynamically store this info at runtime. | runtime: A service runtime which manages the lifecycle of your service, from source to running. The runtime service can run natively locally or on kubernetes, providing a seamless abstraction across both. | store: State is a fundamental requirement of any system. We provide a key-value store to provide simple storage of state which can be shared between services or offload long term to keep microservices stateless and horizontally scalable. | . ",
+    "url": "http://0.0.0.0:4000/concepts/framework#runtime-components",
+    "relUrl": "/concepts/framework#runtime-components"
+  },"36": {
+    "doc": "Framework",
+    "title": "Service Library",
+    "content": "Micro includes a pre-initialised service library built on the previously standalone library go-micro used for distributed systems development. Think Rails or Spring but for Go cloud services. Micro builds on the Go programming language to create a set of strongly defined abstractions for writing services. Normally you’ll spend a lot of time hacking a way at boilerplate code in your main function or battling with distributed systems design patterns. Micro tries to remove all of this pain for you and create simple building blocks all encapsulated in a single service interface. Each service in the runtime has a corresponding package in github.com/micro/micro/v3/service which you can import and use for any need. If you want to publish a message use the broker. If you need to persist data use the store. Or if you just need to make service to service calls use the client. ",
+    "url": "http://0.0.0.0:4000/concepts/framework#service-library",
+    "relUrl": "/concepts/framework#service-library"
+  },"37": {
+    "doc": "Helloworld",
+    "title": "Helloworld",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld",
+    "relUrl": "/tutorials/helloworld"
+  },"38": {
+    "doc": "Helloworld",
+    "title": "Table of contents",
+    "content": ". | Installation | Running a service | Calling a service . | With the CLI | With the framework | From other languages | . | Creating a service | Storage . | Interfaces as building blocks | Using the Store . | With the CLI | With the framework | . | . | Updating a service | Config . | CLI | With the framework | . | Further reading | . ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#table-of-contents",
+    "relUrl": "/tutorials/helloworld#table-of-contents"
+  },"39": {
+    "doc": "Helloworld",
+    "title": "Installation",
+    "content": "# MacOS curl -fsSL https://raw.githubusercontent.com/micro/micro/master/scripts/install.sh | /bin/bash # Linux wget -q https://raw.githubusercontent.com/micro/micro/master/scripts/install.sh -O - | /bin/bash # Windows powershell -Command \"iwr -useb https://raw.githubusercontent.com/micro/micro/master/scripts/install.ps1 | iex\" . ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#installation",
+    "relUrl": "/tutorials/helloworld#installation"
+  },"40": {
+    "doc": "Helloworld",
+    "title": "Running a service",
+    "content": "Before diving into writing a service, let’s run an existing one, because it’s just a few commands away! . First, we have to start the micro server. The command to do that is: . micro server . Before interacting with the micro server, we need to log in with the id ‘admin’ and password ‘micro’: . $ micro login Enter email address: admin Enter Password: Successfully logged in. If all goes well you’ll see log output from the server listing the services as it starts them. Just to verify that everything is in order, let’s see what services are running: . $ micro services api auth broker config network proxy registry runtime server store . All those services are ones started by our micro server. This is pretty cool, but still it’s not something we launched! Let’s start a service for which existence we can actually take credit for. If we go to github.com/micro/services, we see a bunch of services written by micro authors. One of them is the helloworld. Try our luck, shall we? . The command to run services is micro run. micro run github.com/micro/services/helloworld . If we take a look at the running services using micro status, we should see the service listed: . NAME VERSION SOURCE STATUS BUILD UPDATED METADATA helloworld latest helloworld running n/a unknown owner=n/a,group=n/a . We can also have a look at logs of the service to verify it’s running. $ micro logs helloworld micro@Bens-MBP-3 micro % micro logs helloworld 2020-08-11 15:18:33 file=service/service.go:192 level=info Starting [service] helloworld 2020-08-11 15:18:33 file=grpc/grpc.go:902 level=info Server [grpc] Listening on [::]:49602 2020-08-11 15:18:33 file=grpc/grpc.go:728 level=info Registry [service] Registering node: helloworld-c49ee2a3-e9d0-4411-9b9b-5fe6aea6b49d . So since our service is running happily, let’s try to call it! That’s what services are for. ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#running-a-service",
+    "relUrl": "/tutorials/helloworld#running-a-service"
+  },"41": {
+    "doc": "Helloworld",
+    "title": "Calling a service",
+    "content": "We have a couple of options to call a service running on our micro server. With the CLI . Micro auto-generates CLI commands for your service in the form: micro [service] [method], with the default method being “Call”. Arguments can be passed as flags, hence we can call our service using: . $ micro helloworld --name=Jane { \"msg\": \"Hello Jane\" } . That worked! If we wonder what nodes and endpoints a service has we can run the following command: . micro get service helloworld . With the framework . Let’s write a small client we can use to call the helloworld service. Normally you’ll make a service call inside another service so this is just a sample of a function you may write. We’ll learn how to write a full fledged service soon. Let’s take the following file: . package main import ( \"context\" \"fmt\" \"time\" \"github.com/micro/micro/v3/service\" proto \"github.com/micro/services/helloworld/proto\" ) func main() { // create and initialise a new service srv := service.New() // create the proto client for helloworld client := proto.NewHelloworldService(\"helloworld\", srv.Client()) // call an endpoint on the service rsp, err := client.Call(context.Background(), &amp;proto.Request{ Name: \"John\", }) if err != nil { fmt.Println(\"Error calling helloworld: \", err) return } // print the response fmt.Println(\"Response: \", rsp.Msg) // let's delay the process for exiting for reasons you'll see below time.Sleep(time.Second * 5) } . Save the example locally. For ease of following this guide, name the folder example-service. After doing a cd example-service &amp;&amp; go mod init example, we are ready to run this service with micro run: . micro run . micro runs, when successful, do not print any output. A useful command to see what is running, is micro status. At this point we should have two services running: . $ micro status NAME VERSION SOURCE STATUS BUILD UPDATED METADATA example-service latest example-service starting n/a 4s ago owner=n/a,group=n/a helloworld latest github.com/micro/services/helloworld running n/a unknown owner=n/a,group=n/a . Now, since our example-service client is also running, we should be able to see it’s logs: . $ micro logs example-service # some go build output here Response: Hello John . Great! That response is coming straight from the helloworld service we started earlier! . From other languages . In the clients repo there are Micro clients for various languages and frameworks. They are designed to connect easily to the live Micro environment or your local one, but more about environments later. ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#calling-a-service",
+    "relUrl": "/tutorials/helloworld#calling-a-service"
+  },"42": {
+    "doc": "Helloworld",
+    "title": "Creating a service",
+    "content": "To create a new service, use the micro new command. It should output something reasonably similar to the following: . $ micro new helloworld Creating service helloworld in helloworld . ├── main.go ├── generate.go ├── plugin.go ├── handler │   └── helloworld.go ├── subscriber │   └── helloworld.go ├── proto/helloworld │   └── helloworld.proto ├── Dockerfile ├── Makefile ├── README.md ├── .gitignore └── go.mod download protobuf for micro: brew install protobuf go get -u github.com/golang/protobuf/proto go get -u github.com/golang/protobuf/protoc-gen-go go get github.com/micro/micro/v3/cmd/protoc-gen-micro@master compile the proto file helloworld.proto: cd helloworld protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/helloworld/helloworld.proto . As can be seen from the output above, before building the first service, the following tools must be installed: . | protoc | protobuf/proto | protoc-gen-micro | . They are all needed to translate proto files to actual Go code. Protos exist to provide a language agnostic way to describe service endpoints, their input and output types, and to have an efficient serialization format at hand. Currently Micro is Go focused (apart from the clients mentioned before), but this will change soon. So once all tools are installed, being inside the service root, we can issue the following command to generate the Go code from the protos: . protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/helloworld.proto . The generated code must be committed to source control, to enable other services to import the proto when making service calls (see previous section Calling a service. At this point, we know how to write a service, run it, and call other services too. We have everything at our fingertips, but there are still some missing pieces to write applications. One of such pieces is the store interface, which helps with persistent data storage even without a database. ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#creating-a-service",
+    "relUrl": "/tutorials/helloworld#creating-a-service"
+  },"43": {
+    "doc": "Helloworld",
+    "title": "Storage",
+    "content": "Amongst many other useful built-in services Micro includes a persistent storage service for storing data. Interfaces as building blocks . A quick side note. Micro (the server/CLI) and Go Micro (the framework) are centered around strongly defined interfaces which are pluggable and provide an abstraction for underlying distributed systems concepts. What does this mean? . Let’s take our current case of the store interface. It’s aimed to enable service writers data storage with a couple of different implementations: . | in memory | file storage (default when running micro server) | cockroachdb | . Similarly, the runtime interface, that allows you to run services in a completely runtime agnostic way has a few implementations: . | local, which just runs actual processes - aimed at local development | kubernetes - for running containers in a highly available and distributed way | . This is a recurring theme across Micro interfaces. Let’s take a look at the default store when running micro server. Using the Store . With the CLI . First, let’s go over the more basic store CLI commands. To save a value, we use the write command: . $ micro store write key1 value1 . The UNIX style no output meant it was happily saved. What about reading it? . $ micro store read key1 val1 . Or to display it in a fancier way, we can use the --verbose or -v flags. $ micro store read -v key1 KEY VALUE EXPIRY key1 val1 None . This view is especially useful when we use the --prefix or -p flag, which lets us search for entries which key have certain prefixes. To demonstrate that first let’s save an other value: . $ micro store write key2 val2 . After this, we can list both key1 and key2 keys as they both share commond prefixes: . $ micro store read --prefix --verbose key KEY VALUE EXPIRY key1 val1 None key2 val2 None . There is more to the store, but this knowledge already enables us to be dangerous! . With the framework . Accessing the same data we have just manipulated from our Go Micro services could not be easier. First let’s create an entry that our service can read. This time we will specify the table for the micro store write command too, as each service has its own table in the store: . micro store write --table=example mykey \"Hi there\" . Let’s modify the example service we wrote previously so instead of calling a service, it reads the above value from a store. package main import ( \"fmt\" \"time\" \"github.com/micro/micro/v3/service\" \"github.com/micro/micro/v3/service/store\" ) func main() { srv := service.New(service.Name(\"example\")) srv.Init() records, err := store.Read(\"mykey\") if err != nil { fmt.Println(\"Error reading from store: \", err) } if len(records) == 0 { fmt.Println(\"No records\") } for _, record := range records { fmt.Printf(\"key: %v, value: %v\\n\", record.Key, string(record.Value)) } time.Sleep(1 * time.Hour) } . ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#storage",
+    "relUrl": "/tutorials/helloworld#storage"
+  },"44": {
+    "doc": "Helloworld",
+    "title": "Updating a service",
+    "content": "Now since the example service is running (can be easily verified by micro status), we should not use micro run, but rather micro update to deploy it. We can simply issue the update command (remember to switch back to the root directory of the example service first): . micro update . And verify both with the micro server output: . Updating service example-service version latest source /home/username/example-service Processing update event example-service:latest in namespace default . and micro status: . $ micro status example-service NAME VERSION SOURCE STATUS BUILD UPDATED METADATA example-service latest example-service.tar.gz running n/a unknown owner=n/a,group=n/a . that it was updated. If things for some reason go haywire, we can try the time tested “turning it off and on again” solution and do: . micro kill example-service micro run example-service . to start with a clean slate. So once we did update the example service, we should see the following in the logs: . $ micro logs example-service key: mykey, value: Hi there . ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#updating-a-service",
+    "relUrl": "/tutorials/helloworld#updating-a-service"
+  },"45": {
+    "doc": "Helloworld",
+    "title": "Config",
+    "content": "Note: this is a quick overview of config. For a more in depth look, please refer to the config tutorial. Configuration and secrets is an essential part of any production system - let’s see how the Micro config works. CLI . The most basic example of config usage is the following: . $ micro config set key val $ micro config get key val . While this alone is enough for a great many use cases, for purposes of organisation, Micro also support dot notation of keys. Let’s overwrite our keys set previously: . $ micro config set key.subkey val $ micro config get key.subkey val . This is fairly straightforward, but what happens when we get key? . $ micro config get key {\"subkey\":\"val\"} . As it can be seen, leaf level keys will return only the value, while node level keys return the whole subtree as a JSON document: . $ micro config set key.othersubkey val2 $ micro config get key {\"othersubkey\":\"val2\",\"subkey\":\"val\"} . With the framework . Micro configs work very similarly when being called from Go code too: . package main import ( \"fmt\" \"github.com/micro/micro/v3/service\" \"github.com/micro/micro/v3/service/config\" ) func main() { // setup the service srv := service.New(service.Name(\"example\")) srv.Init() // read config value val, err := config.Get(\"key\", \"subkey\") fmt.Println(\"Value of key.subkey: \", val.String(\"\"), err) } . Assuming the folder name for this service is still example-service (to update the existing service, see updating a service): . $ micro logs example-service Value of key.subkey: val . ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#config",
+    "relUrl": "/tutorials/helloworld#config"
+  },"46": {
+    "doc": "Helloworld",
+    "title": "Further reading",
+    "content": "This is just a brief getting started guide for quickly getting up and running with Micro. Come back from time to time to learn more as this guide gets continually upgraded. If you’re interested in learning more Micro magic, have a look at the following sources: . | Read the docs | Learn by example | Ask questions on Slack | . ",
+    "url": "http://0.0.0.0:4000/tutorials/helloworld#further-reading",
+    "relUrl": "/tutorials/helloworld#further-reading"
+  },"47": {
+    "doc": "Get Started",
+    "title": "Get Started",
+    "content": "The fast guide to using the M3O platform . Visit m3o.com/start to get started in minutes. ",
+    "url": "http://0.0.0.0:4000/getting-started",
+    "relUrl": "/getting-started"
+  },"48": {
+    "doc": "Get Started",
+    "title": "Usage",
+    "content": "Install Micro to build, run and manage services locally or on the M3O platform. curl -fsSL https://install.m3o.com/micro | /bin/bash . Set your environment to ‘dev’ for the free environment. micro env set dev . Signup and follow the instructions . micro signup . See m3o.com/start for the rest of the guide. ",
+    "url": "http://0.0.0.0:4000/getting-started#usage",
+    "relUrl": "/getting-started#usage"
+  },"49": {
+    "doc": "Get Started",
+    "title": "Paid Tier",
+    "content": "Dev is an environment for free usage. It’s great for small projects and individual devs but if you want to run a scalable production ready service or product you’ll want to use the M3O Platform paid plan. We’ll provide higher resource limits and more scalable infrastructure along with support and SLAs. To use the M3O Platform set the env to ‘platform’ and signup for a paid subscription. # use the platform micro env set platform # signup to the platform micro signup . Your service API URLs on the platform are served at *.m3o.app rather than *.m3o.dev. See m3o.com/platform for the quick start. ",
+    "url": "http://0.0.0.0:4000/getting-started#paid-tier",
+    "relUrl": "/getting-started#paid-tier"
+  },"50": {
+    "doc": "Home",
+    "title": "Welcome to M3O",
+    "content": "Learn the ins and outs of M3O and become a Micro services ninja! . Micro is an open source framework for cloud native development. M3O is a cloud native platform offering Micro as a Service. ",
+    "url": "http://0.0.0.0:4000/#welcome-to-m3o",
+    "relUrl": "/#welcome-to-m3o"
+  },"51": {
+    "doc": "Home",
+    "title": "Overview",
+    "content": "Too much time is being lost on walking the maze that is the CNCF landscape. Too much time is being lost to managing the complexity of cloud infrastructure. Developers need to get back to what matters, absolute productivity in the software they’re building. For us that means making backend developers super productive. If you’re writing Go based microservices in the Cloud, we’re here to help. Our goal. Drastically simplify backend and API service development for the masses. ",
+    "url": "http://0.0.0.0:4000/#overview",
+    "relUrl": "/#overview"
+  },"52": {
+    "doc": "Home",
+    "title": "Features of M3O",
+    "content": "Key Features of M3O: . | Micro as a Service: Firstly Micro comes fully managed for you so you don’t have to host it yourself or deal with the operations. We take the open source framework and run it in the cloud as a highly available offerring using best of breed technologies. | Connect from Anywhere: Because M3O is a cloud based service you can connect to it from anywhere, whether that’s your local machine or another cloud provider. Use the CLI to drive all the operations, query and interact from any environment using the http API or gRPC Proxy. | Source to Running: We believe developers should focus on writing code not managing infrastructure. That include’s the build pipeline, containers and kubernetes. We abstract away everything. Write your code, run it from local or a hosted git repo on github, gitlab or bitbucket. | . ",
+    "url": "http://0.0.0.0:4000/#features-of-m3o",
+    "relUrl": "/#features-of-m3o"
+  },"53": {
+    "doc": "Home",
+    "title": "Features of Micro",
+    "content": "Because M3O is Micro as a Service you get the following features on the platform: . | Authentication: Auth whether its authentication or authorization is part of the system. Create JWT tokens, define access rules, use one system to govern everything in a simple and straight forward manner. Whether it’s for a user or a service. | Configuration: Dynamic config management allows you to store relevant config that needs to be updated without having to restart services. Throw API keys and business logic related configuration into the secure config service and let your services pick up the changes. | Key-Value Storage: We’re focused on best practices for microservices development which means keeping services mostly stateless. To do this we’re providing persistent storage on the platform. Key-Value allows you to rapidly write code and store data in the format you care about. | Event Streaming: Distributed systems are fundamentally in need of an event driven architecture to breakdown the tight dependencies between them. Using event streaming and pubsub allows you to publish and subscribe to relevant events async. | Service Discovery: Micro and M3O bake in service discovery so you can browse a directory of services to explore your service APIs and enable you to query services by name. Micro is all about microservices and multi-service development. | API Gateway: Finally there’s an API gateway that automatically exposes your services to the outside world over HTTP. Internally writing service to service using gRPC makes sense, but at the end of the day we want to build APIs consumed from clients via HTTP. | . ",
+    "url": "http://0.0.0.0:4000/#features-of-micro",
+    "relUrl": "/#features-of-micro"
+  },"54": {
+    "doc": "Home",
+    "title": "Learn More",
+    "content": "Learn more about the M3O platform in the Concepts section or Get Started. Get Started   Github   Website . ",
+    "url": "http://0.0.0.0:4000/#learn-more",
+    "relUrl": "/#learn-more"
+  },"55": {
+    "doc": "Home",
+    "title": "Home",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/",
+    "relUrl": "/"
+  },"56": {
+    "doc": "Invite Users",
+    "title": "Invite Users",
+    "content": "Here we outline how to invite other users to the M3O platform, share namespaces and collaborate. ",
+    "url": "http://0.0.0.0:4000/getting-started/invite-users",
+    "relUrl": "/getting-started/invite-users"
+  },"57": {
+    "doc": "Invite Users",
+    "title": "Invite to the Platform",
+    "content": "Every user gets 5 invites to send to other users. These can either just be invites to the platform or additional users as part of your own subscription and billing e.g you share a namespace (when using the paid plan). To invite users to the platform . micro invite user --email joe@example.com . ",
+    "url": "http://0.0.0.0:4000/getting-started/invite-users#invite-to-the-platform",
+    "relUrl": "/getting-started/invite-users#invite-to-the-platform"
+  },"58": {
+    "doc": "Invite Users",
+    "title": "Sharing a namespace",
+    "content": "Sharing a namespace means adding additional users to your account. These users basically share your namespace and it allows you all to work together in one place. To invite a user to your namespace . micro invite user --email joe@example.com --namespace $(micro user namespace) . Now they should go through signup as per normal . micro signup . The user should see the following print out during signup. You have been invited to the 'splicing-earthlike-salvage' namespace. Do you want to join it or create your own namespace? Please type \"own\" or \"join\": join . Now you both have the ability to work together. ",
+    "url": "http://0.0.0.0:4000/getting-started/invite-users#sharing-a-namespace",
+    "relUrl": "/getting-started/invite-users#sharing-a-namespace"
+  },"59": {
+    "doc": "Invite Users",
+    "title": "Additional User Billing",
+    "content": "In the case of additional users being added to your namespace, if you’re using the paid ‘platform’ environment these will be billed as extra users in your account and subscription. ",
+    "url": "http://0.0.0.0:4000/getting-started/invite-users#additional-user-billing",
+    "relUrl": "/getting-started/invite-users#additional-user-billing"
+  },"60": {
+    "doc": "Invite Users",
+    "title": "Cross Namespace Collaboration",
+    "content": "We’re working on a feature to unlock cross namespace collaboration where each user writes services in their own namespace but can call or share with others in different namespaces. This means you have total ownership or can even deploy in the other namespace if granted access. Coming soon. ",
+    "url": "http://0.0.0.0:4000/getting-started/invite-users#cross-namespace-collaboration",
+    "relUrl": "/getting-started/invite-users#cross-namespace-collaboration"
+  },"61": {
+    "doc": "Platform",
+    "title": "Platform",
+    "content": "M3O is a platform for cloud native development. ",
+    "url": "http://0.0.0.0:4000/concepts/platform",
+    "relUrl": "/concepts/platform"
+  },"62": {
+    "doc": "Platform",
+    "title": "Overview",
+    "content": "M3O is Micro as a Service. We take the open source Micro framework (v3 and beyond) and host it as a service in the cloud. Think managed kubernetes, elasticsearch, etc or how we prefer to see it git and github. Git is a phenomenal tool for distributed version control and GitHub provides essentially git hosting as a service. Micro is a fantastic tool for writing cloud native services. M3O is Micro hosted as a service. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#overview",
+    "relUrl": "/concepts/platform#overview"
+  },"63": {
+    "doc": "Platform",
+    "title": "Features",
+    "content": "We’re starting with a Dev tier focused on small teams and individuals. You likely don’t want to manage infrastructure and want to focus on Go based microservices development in the cloud. That’s what we’re here for. Where Netlify is the frontend. Micro is the backend and M3O is the host. We’re offering a free Dev tier to start which provides the following: . | Fully managed Micro as a Service | Public API endpoints | Private repo support | Upto 5 collaborators | Upto 5 services | Fair usage limits | . ",
+    "url": "http://0.0.0.0:4000/concepts/platform#features",
+    "relUrl": "/concepts/platform#features"
+  },"64": {
+    "doc": "Platform",
+    "title": "Getting Started",
+    "content": "Visit the getting started guide if you just want to get started. You’ll need an invite though. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#getting-started",
+    "relUrl": "/concepts/platform#getting-started"
+  },"65": {
+    "doc": "Platform",
+    "title": "How it works",
+    "content": "M3O is a cloud service which lets you use Micro without having to manage infrastructure. We run highly available systems on managed kubernetes in the cloud e.g etcd, nats, cockroachdb and then provide a shared multi-tenant experience. From your standpoint its simply Micro hosted for you. For us its scratching an itch to fix the pain points with using AWS and other cloud providers. As a developer you should just be able to focus on writing code but not just a single app, multiple applications and various design patterns in a way that’s not limiting but removes choice and friction in a way that let’s you be super productive. Micro + M3O is just that! . Hosting . M3O hosts Micro in the cloud using various cloud providers in different regions. Initially during the beta phase we’re starting with Scaleway in Europe so that we can focus primarily on users needs and do it in a cost effective manner. Over time we’ll move on to AWS, GCP and Azure in the US and Asia. So how do you access it? . Environments . Micro has the concept of environments or an “env” built in. These are basically different hosted Micro servers you can switch between to do development and run Micro services. There are three built ins, “local”, “dev” and “platform”. Local is your local server running on “127.0.0.1:8081”. Dev is a free environment in the cloud for small projects and testing. The platform refers to the M3O platform for secure, scalable and supported production workloads. You can swap between local, dev and the platform like so. # platform micro env set platform # local micro env set local # dev micro env set dev . Services . M3O provides a hosted version of Micro, which means anything built into the open source is available for you to use. This includes authentication, config, messaging, service discovery, service-to-service calls, storage, etc. Micro comes with a pre-initialised Go library to run on a Micro server and the platform basically abstracts away the underlying infrastructure so you don’t have to worry about it. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#how-it-works",
+    "relUrl": "/concepts/platform#how-it-works"
+  },"66": {
+    "doc": "Platform",
+    "title": "Dev Environment",
+    "content": "The Dev environment is a free tier hosted by us as a best effort service. It’s a place for small projects and individual developers. Our goal is to unlock large scale developer productivity and cross team, cross org collaboration. What GitHub did for source code we feel we could do for services. See m3o.com/start for a quick start guide. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#dev-environment",
+    "relUrl": "/concepts/platform#dev-environment"
+  },"67": {
+    "doc": "Platform",
+    "title": "Pricing",
+    "content": "Dev is a free environment for small projects and individual developers. This might be great for getting something up and running super fast. Maybe spin up a cool side project and show it off on HackerNews. Our paid platform environment is a secure, scalable and supported production environment billed on a subscription pricing plan of $35/user/month. For that you get the ability to deploy upto 10 services with 2x the resource limits of Dev, invite 5 people to collaborate with, support for private git repos and secure public api endpoints for your services. This includes support and business day response times. Cloud and serverless pricing is anxiety inducing in a way that mostly now requires pricing calculators. This doesn’t make sense to us. We believe to start developers should be given a fair flat subscription price and then we charge for additional services you use that are separate to the platform itself. Additional Users . Every additional user added to your platform account is billed at $35/month. Whether you invite them or just plain create the account we’ll keep track and invoice this as “M3O Additonal Users” on your invoices. Additional Services . Beyond 10 services, we bill every additional service at $5/month. Additional service meaning anything with a new unique name e.g users, customers, orders. We’ll add a line item on your invoice called “M3O Additional Services” automatically. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#pricing",
+    "relUrl": "/concepts/platform#pricing"
+  },"68": {
+    "doc": "Platform",
+    "title": "Fair Usage Limits",
+    "content": "We invoke fair usage limits on the platform by capping everything to sane defaults for all namespaces. Over time we may make this configurable or allow you to pay for additional resources. For now the caps are as below per namespace. Dev . The per namespace limits of the Dev environment . | CPU - 1 core | Memory - 1 Gb | Disk - 10 Gb | . Platform . The per namespace limits of the Platform environment . | CPU - 2 cores | Memory - 2 Gb | Disk - 20 Gb | . We apply caps across your namespace to limit overall resource usage. Caps may evolve or change in future to include different resource types but the goal is to provide a fair system that can be shared by all. You can cut up these resources however you like with 10 services running 1 instance each or 1 service running 10 instances. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#fair-usage-limits",
+    "relUrl": "/concepts/platform#fair-usage-limits"
+  },"69": {
+    "doc": "Platform",
+    "title": "Future",
+    "content": "In the future we’ll introduce different pricing tiers for teams and enterprise that include support and SLAs along with additional features for metrics, logs, etc. For now we really want to help small teams and individual developers. ",
+    "url": "http://0.0.0.0:4000/concepts/platform#future",
+    "relUrl": "/concepts/platform#future"
+  },"70": {
+    "doc": "Platform",
+    "title": "Next Steps",
+    "content": "Ask for an invite on the #m3o-platform channel in slack or join the waitlist on the website and wait to here from us. If you go to slack you’ll get an invite asap! . ",
+    "url": "http://0.0.0.0:4000/concepts/platform#next-steps",
+    "relUrl": "/concepts/platform#next-steps"
+  },"71": {
+    "doc": "Private Repos",
+    "title": "Using Private Repos",
+    "content": "M3O supports private repos by passing your git credentials securely to our runtime as secrets. To enable private repos simply store your credentials locally with the following command. micro user config set git.credentials.[org] . ",
+    "url": "http://0.0.0.0:4000/getting-started/private-repos#using-private-repos",
+    "relUrl": "/getting-started/private-repos#using-private-repos"
+  },"72": {
+    "doc": "Private Repos",
+    "title": "GitHub",
+    "content": "This page explains how to get a personal access token from GitHub. Issue this command locally to save your personal access token to your local Micro config: . micro user config set git.credentials.github $your-personal-access-token . ",
+    "url": "http://0.0.0.0:4000/getting-started/private-repos#github",
+    "relUrl": "/getting-started/private-repos#github"
+  },"73": {
+    "doc": "Private Repos",
+    "title": "GitLab",
+    "content": "This page explains how to get a personal access token from GitLab. Issue this command locally to save your personal access token to your local Micro config: . micro user config set git.credentials.gitlab $gitlab-username:$your-personal-access-token . Please note the username requirement above. ",
+    "url": "http://0.0.0.0:4000/getting-started/private-repos#gitlab",
+    "relUrl": "/getting-started/private-repos#gitlab"
+  },"74": {
+    "doc": "Private Repos",
+    "title": "Bitbucket",
+    "content": "This page explains how to get a personal access token from Bitbucket. Issue this command locally to save your personal access token to your local Micro config: . micro user config set git.credentials.bitbucket $bitbucket-username:$your-personal-access-token . Please note the username requirement above. ",
+    "url": "http://0.0.0.0:4000/getting-started/private-repos#bitbucket",
+    "relUrl": "/getting-started/private-repos#bitbucket"
+  },"75": {
+    "doc": "Private Repos",
+    "title": "Git repos hosted on custom domains",
+    "content": "Many people have their own Gitlab etc. installations. To set up credentials in cases like that, do the following: . micro user config set git.credentials.url domain.com micro user config set git.credentials.token $username:$your-personal-access-token . ",
+    "url": "http://0.0.0.0:4000/getting-started/private-repos#git-repos-hosted-on-custom-domains",
+    "relUrl": "/getting-started/private-repos#git-repos-hosted-on-custom-domains"
+  },"76": {
+    "doc": "Private Repos",
+    "title": "Private Repos",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/getting-started/private-repos",
+    "relUrl": "/getting-started/private-repos"
+  },"77": {
+    "doc": "Public APIs",
+    "title": "Publics APIs",
+    "content": "M3O makes your services available via a public http/json API. Query and access your services in the following ways. ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#publics-apis",
+    "relUrl": "/getting-started/public-apis#publics-apis"
+  },"78": {
+    "doc": "Public APIs",
+    "title": "URL",
+    "content": "The public APIs for M3O . Dev environment . api.m3o.dev . Platform environment . api.m3o.com . Your services on Dev . $namespace.m3o.dev . Your services on Platform . $namespace.m3o.app . ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#url",
+    "relUrl": "/getting-started/public-apis#url"
+  },"79": {
+    "doc": "Public APIs",
+    "title": "Namespace",
+    "content": "Namespace is a unique namespace provided only to you and your collaborators. # get user namespace micro user namespace . ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#namespace",
+    "relUrl": "/getting-started/public-apis#namespace"
+  },"80": {
+    "doc": "Public APIs",
+    "title": "Authentication",
+    "content": "Most of our core services are locked down so you’ll need to use an API token to access them. # get your user token` MICRO_API_TOKEN=`micro user token` # curl the api curl -H \"Authorization: Bearer $MICRO_API_TOKEN\" https://api.m3o.dev/ . You should see below or thereabouts . {\"version\": \"v3.0.0-beta\"} . ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#authentication",
+    "relUrl": "/getting-started/public-apis#authentication"
+  },"81": {
+    "doc": "Public APIs",
+    "title": "Generating API Tokens",
+    "content": "This section is coming soon but you can otherwise use your own user token for now. ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#generating-api-tokens",
+    "relUrl": "/getting-started/public-apis#generating-api-tokens"
+  },"82": {
+    "doc": "Public APIs",
+    "title": "Request Mapping",
+    "content": "Because all services are RPC based, HTTP requests have to be dynamically mapped to services and their endpoints. We do this very simply in the manner shown below. # Call helloworld service with Helloworld.Call endpoint https://api.m3o.dev/helloworld/call # Call hellworld service with Greeting.Message endpoint https://api.m3o.dev/helloworld/greeting/message . As you can see if an endpoint matches the service name we can collapse the path so there’s no redundancy. We additionally map the Call endpoint much like index.html for the web so that you can simply do . https://api.m3o.dev/helloworld . A convenient hack just like the web. ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#request-mapping",
+    "relUrl": "/getting-started/public-apis#request-mapping"
+  },"83": {
+    "doc": "Public APIs",
+    "title": "Setting Namespace",
+    "content": "Because your services are in a specific namespace you’ll have to set the Micro-Namespace header to access them via our public api api.m3o.com. You otherwise also get a custom url per namespace which you can read about below. To get your namespace . NAMESPACE=`micro user namespace` . Then simply set as the header in your call . curl -H \"Micro-Namespace: $NAMESPACE\" https://api.m3o.dev/helloworld . This will route to your helloworld service as opposed to someone else’s! . ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#setting-namespace",
+    "relUrl": "/getting-started/public-apis#setting-namespace"
+  },"84": {
+    "doc": "Public APIs",
+    "title": "Custom URLs",
+    "content": "Each user gets a custom URL based on their namespace which is https://[namespace].m3o.dev . Each of your services is then path based e.g https://[namespace].m3o.dev/[service]. For example to route to the helloworld service in the foobar namespace you would do . curl https://foobar.m3o.dev/helloworld . In the platform environment customer URLs are served on the domain *m3o.app. ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#custom-urls",
+    "relUrl": "/getting-started/public-apis#custom-urls"
+  },"85": {
+    "doc": "Public APIs",
+    "title": "Authorization",
+    "content": "Your namespace is managed by your own set of rules which you can read about in the Authorization guide soon or just head to the Authentication tutorial. ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis#authorization",
+    "relUrl": "/getting-started/public-apis#authorization"
+  },"86": {
+    "doc": "Public APIs",
+    "title": "Public APIs",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/getting-started/public-apis",
+    "relUrl": "/getting-started/public-apis"
+  },"87": {
+    "doc": "Resources",
+    "title": "Resources",
+    "content": "A collection of third party resources to help with learning Micro . Also checkout Awesome Micro projects. ",
+    "url": "http://0.0.0.0:4000/resources",
+    "relUrl": "/resources"
+  },"88": {
+    "doc": "Support",
+    "title": "Support",
+    "content": "Get support for the M3O platform at #m3o-support on slack. Otherwise you can email us at support@m3o.com . ",
+    "url": "http://0.0.0.0:4000/resources/support",
+    "relUrl": "/resources/support"
+  },"89": {
+    "doc": "The Post Service",
+    "title": "The Post Service",
+    "content": " ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service",
+    "relUrl": "/tutorials/building-a-blog/the-post-service"
+  },"90": {
+    "doc": "The Post Service",
+    "title": "Table of contents",
+    "content": ". | The Basics | Saving posts | Non-trivial applications with Key-Value stores | Querying posts | Deleting posts | Conclusions | . In this post we will build a post service. It will a good way to learn how to build nontrivial applications with the Key-Value Store interface. The most important takeaway from this post will likely be the the usage of the key-value store for non-trivial usecases (querying blog posts by slug and listing them by reverse creation order). ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#table-of-contents",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#table-of-contents"
+  },"91": {
+    "doc": "The Post Service",
+    "title": "The Basics",
+    "content": "So where to start? In the Getting Started guide we already covered creating a service. Let’s use that knowledge! As a reminder, we have to make sure micro server is running in an other terminal, and we are connected to it, ie . $ micro env * local 127.0.0.1:8081 platform proxy.m3o.com . has the local environment picked. If not, we can issue micro env set local to remedy. Now back to the micro new command: . $ micro new posts $ ls posts Dockerfile Makefile README.md generate.go go.mod handler main.go proto . Great! The best way to start a service is to define the proto. The generated default should be something similar to this: . $ cd posts; # step into project root $ cat proto/posts.proto syntax = \"proto3\"; package posts; service Posts { rpc Call(Request) returns (Response) {} // some more methods here... } message Message { string say = 1; } message Request { string name = 1; } message Response { string msg = 1; } // some more types here... In our post service, we want 3 methods: . | Save for blog insert and update | Query for reading and listing | Delete for deletion | . Let’s start with the post method. Modify our proto/posts.proto file to match the following: . syntax = \"proto3\"; package post; option go_package = \"proto;posts\"; service Posts { rpc Save(SaveRequest) returns (SaveResponse) {} } message Post { string id = 1; string title = 2; string slug = 3; string content = 4; int64 timestamp = 5; repeated string tagNames = 6; } message SaveRequest { Post post = 1; } message SaveResponse { Post post = 1; } . To regenerate the proto, we have to issue the make proto command in the project root. Let’s adjust the handler to match our proto! . package handler import ( \"context\" \"github.com/micro/micro/v3/service/logger\" pb \"posts/proto\" ) type Posts struct {} func (p *Posts) Save(ctx context.Context, req *pb.SaveRequest, rsp *pb.SaveResponse) error { logger.Info(\"Received Posts.Save request\") return nil } . Now, the main.go: . package main import ( \"posts/handler\" pb \"posts/proto\" \"github.com/micro/micro/v3/service\" \"github.com/micro/micro/v3/service/logger\" ) func main() { // New Service srv := service.New( service.Name(\"posts\"), service.Version(\"latest\"), ) // Register Handler pb.RegisterPostsHandler(srv.Server(), new(handler.Posts)) // Run service if err := srv.Run(); err != nil { logger.Fatal(err) } } . At this point micro run . in project root should deploy our post service. Let’s verify with micro logs posts: . $ micro logs posts Starting [service] posts Server [grpc] Listening on [::]:53031 Registry [service] Registering node: posts-b36361ae-f2ae-48b0-add5-a8d4797508be . (The exact output might depend on the actual config format configuraton.) . ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#the-basics",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#the-basics"
+  },"92": {
+    "doc": "The Post Service",
+    "title": "Saving posts",
+    "content": "Let’s make our service do something useful now: save a post. We define our model, the Post type, to match the proto and then modify the handler. The handler should now look like: . package handler import ( \"context\" pb \"posts/proto\" \"github.com/micro/micro/v3/service/errors\" ) type Posts struct {} type Post struct { ID string `json:\"id\"` Title string `json:\"title\"` Slug string `json:\"slug\"` Content string `json:\"content\"` CreateTimestamp int64 `json:\"create_timestamp\"` UpdateTimestamp int64 `json:\"update_timestamp\"` TagNames []string `json:\"tagNames\"` } func (p *Posts) Save(ctx context.Context, req *pb.SaveRequest, rsp *pb.SaveResponse) error { if len(req.Post.Id) == 0 || len(req.Post.Title) == 0 || len(req.Post.Content) == 0 { return errors.BadRequest(\"posts.Save\", \"ID, title or content is missing\") } return nil } . Some defensive programming never hurts to avoid confusion down the road! Not too exciting yet though. How about actually saving our post? To do that we need to understand how key-value stores work. For now, let’s just understand that we want to save the post under the key or keys we will use to retrieve it. Since UUIDs are not too nice, we will use a slug generated by the github.com/gosimple/slug library: . (A slug is a urlified version of a title, ie. How to Micro becomes how-to-micro.) . import ( // other imports \"github.com/micro/micro/v3/service/store\" gostore \"github.com/micro/go-micro/v3/store\" ) // ... // Save a post func (p *Posts) Save(ctx context.Context, req *pb.SaveRequest, rsp *pb.SaveResponse) error { if len(req.Post.Id) == 0 || len(req.Post.Title) == 0 || len(req.Post.Content) == 0 { return errors.BadRequest(\"posts.Save\", \"ID, title or content is missing\") } post := &amp;Post{ ID: req.Post.Id, Title: req.Post.Title, Content: req.Post.Content, Slug: slug.Make(req.Post.Title), TagNames: req.Post.TagNames, CreateTimestamp: time.Now().Unix(), UpdateTimestamp: time.Now().Unix(), } bytes, err := json.Marshal(post) if err != nil { return err } return store.Write(&amp;gostore.Record{ Key: post.Slug, Value: bytes, }) } . After a micro update . in project root, we can start saving posts! . micro posts save --post_id=1 --post_title=\"Post one\" --post_content=\"First saved post\" micro posts save --post_id=2 --post_title=\"Post two\" --post_content=\"Second saved post\" . WOW! We are on a roll! We’ve just saved two posts. There is one problem however. There is no way yet to get the posts out of the post service. Now luckily, micro store commands are designed to interact with the saved data. micro store list will list all keys saved (but not values): . $ micro store list --table=posts post-one post-two . Why are these keys there? Remember we saved the posts by slug. Okay, but where are the values? micro store read comes to our rescue: . $ micro store read --table=posts post-one {\"id\":\"1\",\"title\":\"Post one\", \"content\":\"First saved post\", \"create_timestamp\":1591970869, \"update_timestamp\":1591970869} $ micro store read --table=posts post-two {\"id\":\"2\",\"title\":\"Post two\", \"content\":\"Second saved post\", \"create_timestamp\":1591970870, \"update_timestamp\":1591970870} . It’s a bit annoying however to read values one by one, that’ why the --prefix flag exists: . $ micro store read --table=posts --prefix post {\"id\":\"1\",\"title\":\"Post one\", \"Content\":\"First saved post\", \"create_timestamp\":1591970869, \"update_timestamp\":1591970869} {\"id\":\"2\",\"title\":\"Post two\", \"Content\":\"Second saved post\", \"create_timestamp\":1591970870, \"update_timestamp\":1591970870} . And this takes us to the most important part of this post. ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#saving-posts",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#saving-posts"
+  },"93": {
+    "doc": "The Post Service",
+    "title": "Non-trivial applications with Key-Value stores",
+    "content": "So far we saved posts by slug, but how would we go about listing post in order? As we have seen, listing by prefix gives us pretty much the only query capabilities in the key-value store (and in most other key value stores too, it’s not specific to Micro). So how would we go about enabling post read by slug and listing posts too? Let’s imagine the following key: . $ micro store list slug:first-post slug:second-post timestamp:1591970869 timestamp:1591970870 . We should also note that all records are listed in an alphabetical order of their keys. We can exploit this, coupled with the --offset and --limit concepts to implement paging, ie. micro store read --table=posts --prefix --offset 0 --limit 20 post . would give back the first 20 posts, . micro store read --table=posts --prefix --offset 20 --limit 20 post . would return the second 20 posts - the second page essentially - and so on. Same applies to our post service too as with most micro interfaces the CLI commands are 1-to-1 representations of the framework features. Let’s get to work then and modify our Post handler. We are going to save the post under 3 different keys: under its ID, slug and create timestamp. While coming from an SQL background and being used to keeping the data model first normal form this might look weird, but key-value stores can be an insanely scalable and fast way to store information. This theoretical impurity and somewhat inconvenient way to handle data can enable us to scale our web application to unimaginable scales. The following code piece might be a bit longer than the previous ones, but it contains many important additions, like checking for slug changes. const ( idPrefix = \"id\" slugPrefix = \"slug\" timestampPrefix = \"timestamp\" ) func (p *Posts) Save(ctx context.Context, req *pb.SaveRequest, rsp *pb.SaveResponse) error { if len(req.Post.Id) == 0 || len(req.Post.Title) == 0 || len(req.Post.Content) == 0 { return errors.BadRequest(\"posts.Save\", \"ID, title or content is missing\") } // read by parent ID so we can check if it exists without slug changes getting in the way. records, err := store.Read(fmt.Sprintf(\"%v:%v\", idPrefix, req.Post.Id)) if err != nil &amp;&amp; err != gostore.ErrNotFound { return err } postSlug := slug.Make(req.Post.Title) // If no existing record is found, create a new one if len(records) == 0 { return p.savePost(ctx, nil, &amp;Post{ ID: req.Post.Id, Title: req.Post.Title, Content: req.Post.Content, TagNames: req.Post.TagNames, Slug: postSlug, CreateTimestamp: time.Now().Unix(), }) } record := records[0] oldPost := &amp;Post{} if err := json.Unmarshal(record.Value, oldPost); err != nil { return err } post := &amp;Post{ ID: req.Post.Id, Title: req.Post.Title, Content: req.Post.Content, Slug: postSlug, TagNames: req.Post.TagNames, CreateTimestamp: oldPost.CreateTimestamp, UpdateTimestamp: time.Now().Unix(), } // Check if slug exists recordsBySlug, err := store.Read(fmt.Sprintf(\"%v:%v\", slugPrefix, postSlug)) if err != nil &amp;&amp; err != gostore.ErrNotFound { return err } otherSlugPost := &amp;Post{} if err := json.Unmarshal(record.Value, otherSlugPost); err != nil { return err } if len(recordsBySlug) &gt; 0 &amp;&amp; oldPost.ID != otherSlugPost.ID { return errors.BadRequest(\"posts.Save\", \"An other post with this slug already exists\") } return p.savePost(ctx, oldPost, post) } func (p *Posts) savePost(ctx context.Context, oldPost, post *Post) error { bytes, err := json.Marshal(post) if err != nil { return err } // Save post by ID record := &amp;gostore.Record{ Key: fmt.Sprintf(\"%v:%v\", idPrefix, post.ID), Value: bytes, } if err := store.Write(record); err != nil { return err } // Delete old slug index if the slug has changed if oldPost.Slug != post.Slug { if err := store.Delete(fmt.Sprintf(\"%v:%v\", slugPrefix, post.Slug)); err != nil { return err } } // Save post by slug slugRecord := &amp;gostore.Record{ Key: fmt.Sprintf(\"%v:%v\", slugPrefix, post.Slug), Value: bytes, } if err := store.Write(slugRecord); err != nil { return err } // Save post by timeStamp return store.Write(&amp;gostore.Record{ // We revert the timestamp so the order is chronologically reversed Key: fmt.Sprintf(\"%v:%v\", timestampPrefix, math.MaxInt64-post.CreateTimestamp), Value: bytes, }) } . We can again invoke the Micro CLI to play around with our service after a micro update . in the project root. Let’s insert two posts through the service we wote: . micro posts save --post_id=\"1\" --post_title=\"How to Micro\" --post_content=\"Simply put, Micro is awesome.\" micro posts save --post_id=\"2\" --post_title=\"Fresh posts are fresh\" --post_content=\"This post is fresher than the How to Micro one\" . ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#non-trivial-applications-with-key-value-stores",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#non-trivial-applications-with-key-value-stores"
+  },"94": {
+    "doc": "The Post Service",
+    "title": "Querying posts",
+    "content": "While we can query the data through micro store list --table=posts, we still can’t do that through the service. Implementing the Query handler will enable doing that, but first we need to amend and regenerate our proto. We will also define the Delete endpoint in this step so we don’t have to touch this file again soon: . syntax = \"proto3\"; package posts; option go_package = \"proto;posts\"; service Posts { // Query currently only supports read by slug or timestamp, no listing. rpc Query(QueryRequest) returns (QueryResponse) {} rpc Save(SaveRequest) returns (SaveResponse) {} rpc Delete(DeleteRequest) returns (DeleteResponse) {} } message Post { string id = 1; string title = 2; string slug = 3; string content = 4; int64 timestamp = 5; repeated string tagNames = 6; } message QueryRequest { string slug = 1; int64 offset = 2; int64 limit = 3; } message QueryResponse { repeated Post posts = 1; } message SaveRequest { Post post = 1; } message SaveResponse { Post post = 1; } message DeleteRequest { string id = 1; } message DeleteResponse {} . A make proto issued in the command root should regenerate the Go proto files and we should be ready to define our new handler: . // Query the posts func (p *Posts) Query(ctx context.Context, req *pb.QueryRequest, rsp *pb.QueryResponse) error { var opts []gostore.ReadOption var key string // detemine the key if len(req.Slug) &gt; 0 { key = fmt.Sprintf(\"%v:%v\", slugPrefix, req.Slug) } else { key = fmt.Sprintf(\"%v:\", timestampPrefix) opts = append(opts, gostore.ReadPrefix()) } // set the limit if req.Limit &gt; 0 { opts = append(opts, gostore.ReadLimit(uint(req.Limit))) } else { opts = append(opts, gostore.ReadLimit(20)) } // execute the query records, err := store.Read(key, opts...) if err != nil { return err } // serialize the response rsp.Posts = make([]*pb.Post, len(records)) for i, record := range records { postRecord := &amp;Post{} if err := json.Unmarshal(record.Value, postRecord); err != nil { return err } rsp.Posts[i] = &amp;pb.Post{ Id: postRecord.ID, Title: postRecord.Title, Slug: postRecord.Slug, Content: postRecord.Content, TagNames: postRecord.TagNames, } } return nil } // Delete a post func (p *Posts) Delete(ctx context.Context, req *pb.DeleteRequest, rsp *pb.DeleteResponse) error { return nil } . After doing a micro update . in the project root, we can now query the posts: . $ micro posts query --limit=10 { \"posts\": [ { \"id\": \"1\", \"title\": \"How to Micro\", \"slug\": \"how-to-micro\", \"content\": \"Simply put, Micro is awesome.\" } ] } . Stellar! Now only Delete remains to be implemented to have a basic post service. ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#querying-posts",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#querying-posts"
+  },"95": {
+    "doc": "The Post Service",
+    "title": "Deleting posts",
+    "content": "Since we have already defined Delete in our proto, we only have to implement the handler: . // Delete a post func (p *Posts) Delete(ctx context.Context, req *pb.DeleteRequest, rsp *pb.DeleteResponse) error { records, err := store.Read(fmt.Sprintf(\"%v:%v\", idPrefix, req.Id)) if err == gostore.ErrNotFound { return errors.NotFound(\"posts.Delete\", \"Post not found\") } else if err != nil { return err } post := &amp;Post{} if err := json.Unmarshal(records[0].Value, post); err != nil { return err } // Delete by ID if err = store.Delete(fmt.Sprintf(\"%v:%v\", idPrefix, post.ID)); err != nil { return err } // Delete by slug if err := store.Delete(fmt.Sprintf(\"%v:%v\", slugPrefix, post.Slug)); err != nil { return err } // Delete by timeStamp return store.Delete(fmt.Sprintf(\"%v:%v\", timestampPrefix, post.CreateTimestamp)) } . As it can be seen above, we had to keep in mind all the keys we inserted for a given post. We read the post by ID first to get the slug and the timetamps, ie. to know what to delete. ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#deleting-posts",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#deleting-posts"
+  },"96": {
+    "doc": "The Post Service",
+    "title": "Conclusions",
+    "content": "This brings us to the end of the initial posts tutorial series. There are many more features we will add later, like saving and querying by tags, but this post alreadt taught us enough to digest. We will cover those aspect in later parts of this series. For the latest version of the code, we can consult the github folder of the Posts service. It might contain some (or even many) additional things not covered in the post, as it is the latest version. Recreating the version outlined in this post is left as an exercises for the reader. Our general approach with these tutorials is to keep the snippets in the earlier posts as similar as possible to the latest version (handler names, import names, field names etc.), but reconciling the two might still prove a good exercise as the earliest versions of the services deviate from the latest one on GitHub. ",
+    "url": "http://0.0.0.0:4000/tutorials/building-a-blog/the-post-service#conclusions",
+    "relUrl": "/tutorials/building-a-blog/the-post-service#conclusions"
+  },"97": {
+    "doc": "Tutorials",
+    "title": "Tutorials",
+    "content": "A few tutorials to get you started with Micro . ",
+    "url": "http://0.0.0.0:4000/tutorials",
+    "relUrl": "/tutorials"
+  },"98": {
+    "doc": "Using Micro",
+    "title": "Using Micro",
+    "content": "M3O is Micro as a Service which means you have access to all the underlying services. ",
+    "url": "http://0.0.0.0:4000/getting-started/using-micro",
+    "relUrl": "/getting-started/using-micro"
+  },"99": {
+    "doc": "Using Micro",
+    "title": "Services",
+    "content": "The core services available to you are . | Authentication | Service Discovery | RPC Communication | Dynamic Config | Event Streaming | Key Value Storage | Runtime Management | . We’ll walk through these in more depth in the Concepts section but basically its the OSS Micro v3 provided to you with highly available distributed systems beneath the covers. ",
+    "url": "http://0.0.0.0:4000/getting-started/using-micro#services",
+    "relUrl": "/getting-started/using-micro#services"
+  },"100": {
+    "doc": "Using Micro",
+    "title": "Calling Services",
+    "content": "To use the services peak into the service directory on GitHub. Micro pre-initialises all the services for you so that all you have to do is import the package and call public functions made available to you. Example. Lets make use of calling a service. import ( \"context\" \"github.com/micro/micro/v3/service/client\" pb \"github.com/micro/services/helloworld/proto\" ) req := client.NewRequest(\"helloworld\", \"Helloworld.Call\", &amp;pb.Request{Name: \"Alice\"}) rsp := new(pb.Response) err := client.Call(context.Background(), req, &amp;rsp) . If you want to use code generation . hw := pb.NewHelloworldService(\"helloworld\", client.DefaultClient) rsp, err := hw.Call(context.Background(), &amp;pb.Request{Name: \"Alice\"}) . ",
+    "url": "http://0.0.0.0:4000/getting-started/using-micro#calling-services",
+    "relUrl": "/getting-started/using-micro#calling-services"
+  },"101": {
+    "doc": "Using Micro",
+    "title": "Publish/Subscribe to Events",
+    "content": "What about say publishing events? . import \"github.com/micro/micro/v3/events\" events.Publish(\"event-topic\", map[string]string{\"foo\": \"bar\"}) . And on the subscribe side . eventChan, err := events.Subscribe(\"event-topic\") . ",
+    "url": "http://0.0.0.0:4000/getting-started/using-micro#publishsubscribe-to-events",
+    "relUrl": "/getting-started/using-micro#publishsubscribe-to-events"
+  },"102": {
+    "doc": "Using Micro",
+    "title": "Storing and Retrieving Data",
+    "content": "import ( // we're fixing this kv \"github.com/micro/go-micro/v3/store\" \"github.com/micro/micro/v3/store\" ) // write the record store.Write(&amp;kv.Record{ Key: \"foo\", Value: []byte(`Bar`), }) // read the record rec, err := store.Read(\"foo\") // delete the record store.Delete(\"foo\") . We’ll provide further documentation on everything soon but feel free to just talk to us in Slack for now. ",
+    "url": "http://0.0.0.0:4000/getting-started/using-micro#storing-and-retrieving-data",
+    "relUrl": "/getting-started/using-micro#storing-and-retrieving-data"
+  }
+}
