@@ -118,7 +118,7 @@ micro posts save --id=2 --title="Post two" --content="Second saved post"
 
 Again, implementation starts with defining the protos:
 
-<script src="https://emgithub.com/embed.js?target=https%3A%2F%2Fgithub.com%2Fmicro%2Fdev%2Fblob%2Fmaster%2Fblog-tutorial%2Fv1-posts%2Fproto%2Fposts.proto&style=github&showBorder=on&showLineNumbers=on&showFileMeta=on"></script>
+<script src="https://emgithub.com/embed.js?target=https%3A%2F%2Fgithub.com%2Fmicro%2Fdev%2Fblob%2Fmaster%2Fblog-tutorial%2Fv1-posts%2Fproto%2Fposts.proto%23L35-L53&style=github&showBorder=on&showLineNumbers=on&showFileMeta=on"></script>
 
 A `make proto` issued in the command root should regenerate the Go proto files and we should be ready to define our new handler:
 
@@ -166,5 +166,7 @@ This brings us to the end of the first post in the blogs tutorial series.
 There are many more features we will add later, like saving and querying by tags, but this post already taught us enough to digest.
 We will cover those aspect in later parts of this series.
 
-The source code for this
-Our general approach with these tutorials is to keep the snippets in the earlier posts as similar as possible to the latest version (handler names, import names, field names etc.), but reconciling the two might still prove a good exercise as the earliest versions of the services deviate from the latest one on GitHub.
+The source code for this can be found [here](https://github.com/micro/dev/tree/master/blog-tutorial/v1-posts).
+Further versions will be in the same `blog-tutorial` folder with different versions, ie `v2-posts` and once we have more services, `v2-tags`, `v2-comments`.
+Folders with the same prefix will be meant to be deployed together, but more on this later.
+
