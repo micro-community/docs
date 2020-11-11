@@ -166,7 +166,7 @@ This brings us to the end of the first post in the blogs tutorial series.
 There are many more features we will add later, like saving and querying by tags, but this post already taught us enough to digest.
 We will cover those aspect in later parts of this series.
 
-The source code for this can be found [here](https://github.com/micro/dev/tree/master/blog-tutorial/v1-posts).
-Further versions will be in the same `blog-tutorial` folder with different versions, ie `v2-posts` and once we have more services, `v2-tags`, `v2-comments`.
+The source code for this can be found [here](https://github.com/micro/dev/tree/master/blog/v1-posts).
+Further versions will be in the same `blog` folder with different versions, ie `v2-posts` and once we have more services, `v2-tags`, `v2-comments`.
 Folders with the same prefix will be meant to be deployed together, but more on this later.
 
