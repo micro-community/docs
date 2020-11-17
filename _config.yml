@@ -39,8 +39,8 @@ footer_content: "Copyright &copy; 2020 Micro Community, Org. Powered by <a href=
 # Build settings
 highlighter: rouge
 
-# unhash for local development
-#theme: just-the-docs
+# uncomment for local development
+theme: just-the-docs
 
 remote_theme: pmarsceill/just-the-docs
 plugins:
