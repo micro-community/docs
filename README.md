@@ -1,6 +1,6 @@
 # M3O Docs
 
-This directory serves as the M3O docs made available on [m3o.dev](https://m3o.dev)
+This directory serves as the Micro-Community docs for m3o made available on [m3o.dev](https://m3o.dev)
 
 ## Overview
 
