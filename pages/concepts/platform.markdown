@@ -41,7 +41,7 @@ We're offering a free Dev tier to start which provides the following:
 
 ## Getting Started
 
-Visit the [getting started](/getting-started) guide if you just want to get started. You'll need an invite though.
+Visit the [getting started](/getting-started) guide if you just want to get started.
 
 ## How it works
 
@@ -156,5 +156,6 @@ additional features for metrics, logs, etc. For now we really want to help small
 
 ## Next Steps
 
-Ask for an invite on the #m3o-platform channel in [slack](https://slack.m3o.com) or join the waitlist on 
-the [website](https://m3o.com) and wait to here from us. If you go to slack you'll get an invite asap!
+Head to the [signup](https://m3o.com/signup) page to get started or join us on [slack](https://slack.m3o.com) to chat.
+
+To kick the tyres on the open source [Micro](https://github.com/micro/micro) project head to [micro.mu](https://micro.mu).
