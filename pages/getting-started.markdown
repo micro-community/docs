@@ -43,16 +43,4 @@ Dev is an environment for free usage. It's great for small projects and individu
 to run a scalable production ready service or product you'll want to use the M3O Platform paid plan. 
 We'll provide higher resource limits and more scalable infrastructure along with support and SLAs.
 
-To use the M3O Platform set the env to 'platform' and signup for a paid subscription.
-
-```
-# use the platform
-micro env set platform
-
-# signup to the platform
-micro signup
-```
-
-Your service API URLs on the platform are served at `*.m3o.app` rather than `*.m3o.dev`.
-
-See [**m3o.com/platform**](https://m3o.com/platform) for the quick start.
+To use the M3O Platform plan email [support@m3o.com](mailto:support@m3o.com) and we'll upgrade you in place.
