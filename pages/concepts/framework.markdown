@@ -91,3 +91,6 @@ Each service in the runtime has a corresponding package in [github.com/micro/mic
 you can import and use for any need. If you want to publish a message use the broker. If you need to persist data use the store. Or if you just need 
 to make service to service calls use the client.
 
+## Documentation
+
+For the open source [Micro](https://github.com/micro/micro) documentation see [micro.mu](https://micro.mu)

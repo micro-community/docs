@@ -7,7 +7,11 @@ parent: Get Started
 ---
 # Using Micro
 
-M3O is Micro as a Service which means you have access to all the underlying services.
+Micro is an open source platform for API and Go services development.
+
+## Learn Micro
+
+To learn about [Micro](https://github.com/micro/micro) head to the open source website [micro.mu](https://micro.mu).
 
 ## Services
 
@@ -23,6 +27,71 @@ The core services available to you are
 
 We'll walk through these in more depth in the [Concepts](/concepts) section but basically its the OSS 
 Micro v3 provided to you with highly available distributed systems beneath the covers.
+
+## Creating a Service
+
+Services are created using the Go framework provided by Micro. They make use of gRPC and protobuf at the core 
+and provide a simpler set of abstractions to build on.
+
+Here's an example. If you want further info see the [helloworld]({{ site.baseurl }}/tutorials/helloworld) example.
+
+Services are defined using protobuf
+
+```proto
+syntax = "proto3";
+
+package helloworld;
+
+service Helloworld {
+	rpc Call(Request) returns (Response) {}
+}
+
+message Request {
+	string name = 1;
+}
+
+message Response {
+	string msg = 1;
+}
+```
+
+They're then code generated using `protoc` and implemented using Micro
+
+```go
+package main
+
+import (
+	"context"
+  
+	"github.com/micro/micro/v3/service"
+	"github.com/micro/micro/v3/service/logger"
+	pb "github.com/micro/services/helloworld/proto"
+)
+
+type Helloworld struct{}
+
+// Call is a single request handler called via client.Call or the generated client code
+func (h *Helloworld) Call(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
+	logger.Info("Received Helloworld.Call request")
+	rsp.Msg = "Hello " + req.Name
+	return nil
+}
+
+func main() {
+	// Create service
+	srv := service.New(
+		service.Name("helloworld"),
+	)
+
+	// Register Handler
+	srv.Handle(new(Helloworld))
+
+	// Run the service
+	if err := srv.Run(); err != nil {
+		logger.Fatal(err)
+	}
+}
+```
 
 ## Calling Services
 
@@ -90,4 +159,8 @@ rec, err := store.Read("foo")
 store.Delete("foo")
 ```
 
-We'll provide further documentation on everything soon but feel free to just talk to us in Slack for now.
+## Further Documentation
+
+To learn more about [Micro](https://github.com/micro/micro) head to the open source website [micro.mu](https://micro.mu)
+
+
